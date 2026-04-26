@@ -1,6 +1,6 @@
 # No Secreto
 
-No Secreto is a browser-based cryptographic decryption game. Pick a difficulty, enter a codename, and solve a series of encrypted messages before the timer or your lives run out.
+No Secreto is a browser-based cryptographic decryption game. Pick a difficulty, enter a codename, and solve a series of encrypted messages before the timer or your lives run out. Each completed mission can be saved to a local leaderboard, with separate rankings for each difficulty.
 
 This project was inspired by Chapter 8 of Kenneth Rosen's number theory textbook for UT Austin's M 328K class.
 
@@ -11,6 +11,7 @@ This project was inspired by Chapter 8 of Kenneth Rosen's number theory textbook
 - `app.js` contains the cipher implementations, game state, timer, tools, and leaderboard logic.
 - `messages.json` contains the sentence dataset used for encryption and decryption prompts.
 - `leaderboard.json` can provide starter leaderboard records and matches the export format.
+- `.gitignore` excludes local editor files, logs, temporary files, macOS metadata, and future dependency folders.
 
 ## Running
 
@@ -24,6 +25,22 @@ Then visit `http://localhost:8080/no_secreto.html`.
 
 The app loads `messages.json` and `leaderboard.json` from JavaScript, so serving the folder is recommended. Some browsers block loading local JSON files when opening `no_secreto.html` directly.
 
+If `localhost:8080` shows `ERR_EMPTY_RESPONSE`, stop the stale server process and start it again from the project folder:
+
+```bash
+lsof -nP -iTCP:8080 -sTCP:LISTEN
+kill <PID>
+python3 -m http.server 8080
+```
+
+If port `8080` is busy, use another port and update the URL:
+
+```bash
+python3 -m http.server 8081
+```
+
+Then visit `http://localhost:8081/no_secreto.html`.
+
 ## Gameplay
 
 - Choose one of four difficulties: Cadet, Agent, Operative, or Extreme.
@@ -33,7 +50,8 @@ The app loads `messages.json` and `leaderboard.json` from JavaScript, so serving
 - Hints and analysis tools are available during each mission.
 - Messages are drawn from a shuffled sentence dataset so each mission feels less predictable.
 - You can edit `messages.json` to add, remove, or revise the sentences used by the game.
-- Leaderboard records are stored locally in the browser with `localStorage` and displayed in separate boards for each difficulty.
+- Leaderboard records are stored locally in the browser with `localStorage`.
+- The leaderboard displays separate top-score boards for Cadet, Agent, Operative, and Extreme.
 - The leaderboard screen can export current records as `leaderboard.json`.
 - You can edit `leaderboard.json` to provide starter scores, but a static browser page cannot silently write back to that file without a backend.
 
